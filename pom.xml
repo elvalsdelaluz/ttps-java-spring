@@ -7,13 +7,13 @@
   <name>cuentasclaras</name>
   <description>Project for Spring Core</description>
      <dependencies>
-
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
+		 <dependency>
+		    <groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
+		    <version>5.0.0</version> <!-- Utiliza la versión más reciente disponible -->
+		    <scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
