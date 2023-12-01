@@ -26,8 +26,8 @@ public class Usuario {
 	 @Temporal(TemporalType.DATE)
 	 private Date fecha_creacion;
 	 
-//	 @ManyToMany(mappedBy="miembros")
-//	 private List<Grupo> grupos; 
+	 @ManyToMany(mappedBy="miembros", fetch = FetchType.EAGER)
+	 private List<Grupo> grupos; 
 	 
 	 //CONSTRUCTORES
 	
