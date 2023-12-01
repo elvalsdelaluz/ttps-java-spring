@@ -4,10 +4,13 @@ package ttps.spring.models;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence. *;
 
 
 @Entity
+@JsonIgnoreProperties({ "contraseña" })
 public class Usuario {
 	 @Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
 	 @Column(unique=true, nullable=false)

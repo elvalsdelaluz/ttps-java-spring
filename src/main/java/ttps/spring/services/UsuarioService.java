@@ -49,5 +49,11 @@ public class UsuarioService {
 		}
 	}
 	
+	public boolean existeUsuario(String email) {
+		Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElse(null);
+		return usuario != null;
+	}
+	
 	
 }
