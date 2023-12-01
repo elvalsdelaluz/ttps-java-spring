@@ -13,13 +13,21 @@ public class UsuarioService {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
-	
-	
+	//CONSTRUCTOR
 	public UsuarioService(UsuarioRepository usuarioRepository) {
 		super();
 		this.usuarioRepository = usuarioRepository;
 	}
-
+	
+    //METODOS
+	public boolean autenticarUsuario(String email, String contraseña) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElse(null);
+        System.out.println("EL USUARIO");
+        System.out.println(usuario);
+        return usuario != null && contraseña.equals(usuario.getContraseña());
+    }
+	
 	public ArrayList<Usuario> obtenerUsuarios(){
 		return (ArrayList<Usuario>)usuarioRepository.findAll();
 	}

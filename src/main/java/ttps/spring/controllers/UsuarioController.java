@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ttps.spring.dto.UsuarioCredenciales;
 import ttps.spring.models.Usuario;
 import ttps.spring.services.UsuarioService;
 
@@ -21,12 +23,28 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	
+	//CONSTRUCTOR
 	public UsuarioController(UsuarioService usuarioService) {
 		super();
 		this.usuarioService = usuarioService;
 	}
 
+	//METODOS
+//	@PostMapping("/login")
+//    public ResponseEntity<Boolean> autenticarUsuario(@RequestParam String email, @RequestParam String contraseña) {
+//        boolean autenticado = usuarioService.autenticarUsuario(email, contraseña);
+//        return ResponseEntity.ok(autenticado);
+//    }
+
+	@PostMapping("/login")
+    public ResponseEntity<Boolean> autenticarUsuario(@RequestBody UsuarioCredenciales credenciales) {
+        String email = credenciales.getEmail();
+        String contraseña = credenciales.getContraseña();
+
+        boolean autenticado = usuarioService.autenticarUsuario(email, contraseña);
+        return ResponseEntity.ok(autenticado);
+    }
+	
 	@GetMapping()
 	public ArrayList<Usuario> obtenerUsuarios(){
 		return usuarioService.obtenerUsuarios();
