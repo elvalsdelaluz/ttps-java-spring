@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-body">
+    <form (submit)="addGroup()">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="nombre">
+        </div>
+        <button class="btn btn-primary btn-block">
+            Crear
+        </button>
+        <button class="btn btn-secondary btn-block" [routerLink]="['/groups']">
+            Volver
+        </button>
+    </form>
+  </div>
+
+</div>

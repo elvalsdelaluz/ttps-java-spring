@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ttps.spring.dto.UsuarioCredenciales;
+import ttps.spring.dto.UsuarioDTO;
+import ttps.spring.dto.UsuarioRequestDTO;
 import ttps.spring.models.Usuario;
 import ttps.spring.services.UsuarioService;
 
@@ -39,12 +41,18 @@ public class UsuarioController {
 //    }
 
 	@PostMapping("/login")
-    public ResponseEntity<Boolean> autenticarUsuario(@RequestBody UsuarioCredenciales credenciales) {
+    public ResponseEntity<UsuarioDTO> autenticarUsuario(@RequestBody UsuarioCredenciales credenciales) {
         String email = credenciales.getEmail();
         String contraseña = credenciales.getContraseña();
 
-        boolean autenticado = usuarioService.autenticarUsuario(email, contraseña);
-        return ResponseEntity.ok(autenticado);
+        Usuario usuario = usuarioService.autenticarUsuario(email, contraseña);
+        if (usuario != null) {
+        	UsuarioDTO usuarioResponse = new UsuarioDTO();
+        	usuarioResponse.setId_usuario(usuario.getId());
+        	usuarioResponse.setEmail(usuario.getEmail());
+            return new ResponseEntity<UsuarioDTO>(usuarioResponse, HttpStatus.OK);
+        }
+		return new ResponseEntity<UsuarioDTO>(HttpStatus.NOT_FOUND);
     }
 	
 	@GetMapping()
@@ -71,45 +79,56 @@ public class UsuarioController {
 
 	
 	@PostMapping
-	public ResponseEntity<Void> crearUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<Void> crearUsuario(@RequestBody UsuarioRequestDTO usuario) {
+		
 	    boolean existe = this.usuarioService.existeUsuario(usuario.getEmail());
 
 	    if (existe) {
 	        System.out.println("Ya existe un usuario con email " + usuario.getEmail());
 	        return new ResponseEntity<>(HttpStatus.CONFLICT);
 	    }
-
-	    this.usuarioService.guardarUsuario(usuario);
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setNombre(usuario.getNombre());
+        nuevoUsuario.setApellido(usuario.getApellido());
+        nuevoUsuario.setEmail(usuario.getEmail());
+        nuevoUsuario.setContraseña(usuario.getPassword());
+        System.out.println("Constraseñaas");
+        System.out.println(usuario.getPassword());
+        System.out.println(nuevoUsuario.getContraseña());
+	    this.usuarioService.guardarUsuario(nuevoUsuario);
 	    return new ResponseEntity<>(HttpStatus.CREATED);
 	 }
     
 	 @PutMapping("/{id}")
 	 public ResponseEntity<Usuario> actualizarUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuario) {
-	 System.out.println("Actualizando el usuario " + id);
-
-	 Optional<Usuario> currentUser = this.usuarioService.obtenerPorId(id);
-
-	 if (currentUser.isPresent()) {
-		 this.usuarioService.guardarUsuario(usuario);
-		 return new ResponseEntity<Usuario>(currentUser.get(), HttpStatus.OK);
-	 }
-	 System.out.println("User with id " + id + " not found");
-	 return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
+		 System.out.println("Actualizando el usuario " + id);
+	
+		 Optional<Usuario> currentUser = this.usuarioService.obtenerPorId(id);
+	
+		 if (currentUser.isPresent()) {
+			 Usuario auxUser = currentUser.get();
+			 auxUser.setNombre(usuario.getNombre());
+			 auxUser.setApellido(usuario.getApellido());
+			 this.usuarioService.guardarUsuario(auxUser);
+			 return new ResponseEntity<Usuario>(currentUser.get(), HttpStatus.OK);
+		 }
+		 System.out.println("No se pudo actualizar el usuario con id" + id );
+		 return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
 	 }
 	 
 	
 		@DeleteMapping(path="/{id}")
 		public ResponseEntity<Usuario> eliminarPorId(@PathVariable("id") Long id) {
-			boolean ok = this.usuarioService.eliminarUsuario(id);
-			if (ok) {
+			Optional<Usuario> user = this.usuarioService.obtenerPorId(id);
+			if (user.isPresent()) {
+				this.usuarioService.eliminarUsuario(id);
 				System.out.println("Se eliminó el usuario con id" +id);
 				return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);
 			}
 			else {
 				System.out.println("No es posible eliminar, no se encuentra el usuario con id " + id);
 				return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
-			}
-			
+			}	
 		}
 		
 	

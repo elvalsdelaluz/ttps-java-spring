@@ -5,7 +5,7 @@ import jakarta.persistence. *;
 @Entity 
 public class CategoriaGasto {
 	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private Long id_categoria_gasto;
+	private Long id;
 	private String nombre;
 	@Lob
 	private String imagen;
@@ -33,14 +33,14 @@ public class CategoriaGasto {
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
-
-	public Long getId_categoria_gasto() {
-		return id_categoria_gasto;
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setId_categoria_gasto(Long id_categoria_gasto) {
-		this.id_categoria_gasto = id_categoria_gasto;
-	} 
+	
 	
 	
 

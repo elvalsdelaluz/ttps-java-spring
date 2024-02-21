@@ -14,4 +14,6 @@ import ttps.spring.models.Usuario;
 public interface UsuarioRepository extends JpaRepository <Usuario, Long> {
 	 public abstract Optional<Usuario> findByEmail(String email);
 
+	public abstract Optional<Usuario> findById(Long id);
+
 }

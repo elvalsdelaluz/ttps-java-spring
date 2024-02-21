@@ -4,32 +4,39 @@ package ttps.spring.models;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence. *;
 
 @Entity
 public class Gasto {
 	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private Long id_gasto;
+	private Long id;
 	private double monto;
 	@Temporal(TemporalType.DATE)
-	private Date fecha_creacion;
+	private Date fechaCreacion;
 	@Lob
 	private String imagen;
 	
 	@ManyToOne  //UNIDIRECCIONAL
-	@JoinColumn(name = "id_usuario")
+	@JoinColumn(name = "idUsuario")
 	private Usuario usuario;
 	
-	private String forma_division;
+	private String formaDivision;
 	
 	@ManyToOne  //UNIDIRECCIONAL
-	@JoinColumn(name = "id_categoria_gasto")
+	@JoinColumn(name = "idCategoriaGasto")
 	private CategoriaGasto categoria;
 	
+	@JsonIgnore
 	@ManyToOne 
-	@JoinColumn(name="id_grupo")
+	@JoinColumn(name="idGrupo")
 	private Grupo grupo;
 	
+	@OneToMany(mappedBy="gasto", fetch = FetchType.EAGER)
+	private List<Deuda> participantes;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy="gasto")
 	private List<Pago> pagos;
 	 
@@ -40,9 +47,9 @@ public class Gasto {
 			String forma_division, CategoriaGasto categoria, Grupo grupo) {
 		super();
 		this.monto = monto;
-		this.fecha_creacion = new java.util.Date();
+		this.fechaCreacion = new java.util.Date();
 		this.usuario = usuario;
-		this.forma_division = forma_division;
+		this.formaDivision = forma_division;
 		this.categoria = categoria;
 		this.grupo = grupo;
 	}
@@ -51,13 +58,6 @@ public class Gasto {
 	
 
 	//GETTER AND SETTER
-	public Long getId_gasto() {
-	    return id_gasto;
-	}
-	
-	public void setId_gasto(Long id_gasto) {
-		this.id_gasto = id_gasto;
-	}
 	
 	public List<Pago> getPagos() {
 		return pagos;
@@ -80,12 +80,7 @@ public class Gasto {
 	public void setMonto(double monto) {
 		this.monto = monto;
 	}
-	public Date getFecha() {
-		return fecha_creacion;
-	}
-	public void setFecha(Date fecha) {
-		this.fecha_creacion = fecha;
-	}
+	
 	public String getImagen() {
 		return imagen;
 	}
@@ -104,27 +99,31 @@ public class Gasto {
 	public void setCategoria(CategoriaGasto categoria) {
 		this.categoria = categoria;
 	}
-
-
-	public Date getFecha_creacion() {
-		return fecha_creacion;
+	public Long getId() {
+		return id;
 	}
-
-
-	public void setFecha_creacion(Date fecha_creacion) {
-		this.fecha_creacion = fecha_creacion;
+	public void setId(Long id) {
+		this.id = id;
 	}
-
-
-	public String getForma_division() {
-		return forma_division;
+	public Date getFechaCreacion() {
+		return fechaCreacion;
 	}
-
-
-	public void setForma_division(String forma_division) {
-		this.forma_division = forma_division;
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
-	
+	public String getFormaDivision() {
+		return formaDivision;
+	}
+	public void setFormaDivision(String formaDivision) {
+		this.formaDivision = formaDivision;
+	}
+	public List<Deuda> getParticipantes() {
+		return participantes;
+	}
+	public void setParticipantes(List<Deuda> participantes) {
+		this.participantes = participantes;
+	}
+    
 	
 	
 

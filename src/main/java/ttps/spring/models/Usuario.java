@@ -10,11 +10,11 @@ import jakarta.persistence. *;
 
 
 @Entity
-@JsonIgnoreProperties({ "contraseña" })
+@JsonIgnoreProperties({"contactos", "grupos", "contraseña" })
 public class Usuario {
 	 @Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
 	 @Column(unique=true, nullable=false)
-	 private Long id_usuario;
+	 private Long id;
 	 private String apellido;
 	 private String nombre;
 	 private String email;
@@ -22,12 +22,12 @@ public class Usuario {
 	 @ManyToMany(fetch = FetchType.EAGER)
 	 @JoinTable(
 	        name = "contactos",
-	        joinColumns = @JoinColumn(name = "usuario_id"),
-	        inverseJoinColumns = @JoinColumn(name = "contacto_id"))
+	        joinColumns = @JoinColumn(name = "idUsuario"),
+	        inverseJoinColumns = @JoinColumn(name = "idContacto"))
 	 private List<Usuario> contactos;
 	 
 	 @Temporal(TemporalType.DATE)
-	 private Date fecha_creacion;
+	 private Date fechaCreacion;
 	 
 	 @ManyToMany(mappedBy="miembros", fetch = FetchType.EAGER)
 	 private List<Grupo> grupos; 
@@ -41,7 +41,7 @@ public class Usuario {
 		this.nombre = nombre;
 		this.email = email;
 		this.contraseña = contraseña;
-		this.fecha_creacion = new java.util.Date();
+		this.fechaCreacion = new java.util.Date();
 		//this.grupos = new ArrayList<Grupo> ();
 		//this.contactos = new ArrayList<Usuario>();
 	 }
@@ -75,14 +75,7 @@ public class Usuario {
 		this.contraseña = contraseña;
 	}
 
-	public Long getId_usuario() {
-		return id_usuario;
-	}
-
-	public void setId_usuario(Long id_usuario) {
-		this.id_usuario = id_usuario;
-	}
-
+	
 	public List<Usuario> getContactos() {
 		return contactos;
 	}
@@ -91,22 +84,30 @@ public class Usuario {
 		this.contactos = contactos;
 	}
 
-	public Date getFecha_creacion() {
-		return fecha_creacion;
+	public List<Grupo> getGrupos() {
+		return grupos;
 	}
 
-	public void setFecha_creacion(Date fecha_creacion) {
-		this.fecha_creacion = fecha_creacion;
+	public void setGrupos(List<Grupo> grupos) {
+		this.grupos = grupos;
 	}
 
-//	public List<Grupo> getGrupos() {
-//		return grupos;
-//	}
-//
-//	public void setGrupos(List<Grupo> grupos) {
-//		this.grupos = grupos;
-//	}
-//    
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
 	
 	 
 

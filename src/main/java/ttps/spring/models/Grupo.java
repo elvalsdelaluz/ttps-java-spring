@@ -3,53 +3,48 @@ package ttps.spring.models;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import jakarta.persistence. *;
 
 @Entity
 public class Grupo {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private Long id_grupo;
+	private Long id;
     private String nombre;
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
-        name = "grupo_usuario",
-        joinColumns = @JoinColumn(name = "id_grupo"),
-        inverseJoinColumns = @JoinColumn(name = "id_usuario"))
+        name = "grupoUsuario",
+        joinColumns = @JoinColumn(name = "idGrupo"),
+        inverseJoinColumns = @JoinColumn(name = "idUsuario"))
+    
     private List<Usuario> miembros;
     
-    @OneToMany(mappedBy="grupo")
+    @OneToMany(mappedBy="grupo", fetch = FetchType.EAGER)
+    @JsonIgnore
 	private List<Gasto> gastos;
     
-    @ManyToOne //UNIDIRECCIONAL
-	@JoinColumn(name = "id_categoria_grupo")
-	private CategoriaGrupo categoria;
     
 	@Temporal(TemporalType.DATE)
-	private Date fecha_creacion;
+	private Date fechaCreacion;
 	
 	//CONSTRUCTOR
 	
 	
-	public Grupo(String nombre, List<Usuario> miembros, List<Gasto> gastos, CategoriaGrupo categoria) {
+	public Grupo(String nombre, List<Usuario> miembros, List<Gasto> gastos) {
 		super();
 		this.nombre = nombre;
 		this.miembros = miembros;
 		this.gastos = gastos;
-		this.categoria = categoria;
-		this.fecha_creacion = new java.util.Date();;
+		this.fechaCreacion = new java.util.Date();;
 	}
 	
 	public Grupo() {}
 	
 
 	//GETTER AND SETTER
-	public Long getId_grupo() {
-		return id_grupo;
-	}
-	public void setId_grupo(Long id_grupo) {
-		this.id_grupo = id_grupo;
-	}
 	
 	public String getNombre() {
 		return nombre;
@@ -71,22 +66,21 @@ public class Grupo {
 		this.gastos = gastos;
 	}
 
-	public CategoriaGrupo getCategoria() {
-		return categoria;
-	}
-	public void setCategoria(CategoriaGrupo categoria) {
-		this.categoria = categoria;
+	public Long getId() {
+		return id;
 	}
 
-	public Date getFecha_creacion() {
-		return fecha_creacion;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setFecha_creacion(Date fecha_creacion) {
-		this.fecha_creacion = fecha_creacion;
+	public Date getFechaCreacion() {
+		return fechaCreacion;
 	}
-	
-	
-	
 
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	
 }

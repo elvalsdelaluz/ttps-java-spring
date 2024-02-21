@@ -20,12 +20,18 @@ public class UsuarioService {
 	}
 	
     //METODOS
-	public boolean autenticarUsuario(String email, String contraseña) {
+	public Usuario autenticarUsuario(String email, String contraseña) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElse(null);
-        System.out.println("EL USUARIO");
-        System.out.println(usuario);
-        return usuario != null && contraseña.equals(usuario.getContraseña());
+       
+        if (usuario != null){
+        	if (!usuario.getContraseña().equals(contraseña)) {
+        		System.out.println(usuario.getContraseña());
+        		System.out.println(contraseña);
+        		return null;
+        	}         	
+        }
+        return usuario;
     }
 	
 	public ArrayList<Usuario> obtenerUsuarios(){
@@ -54,6 +60,5 @@ public class UsuarioService {
                 .orElse(null);
 		return usuario != null;
 	}
-	
 	
 }
