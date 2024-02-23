@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ttps.spring.dto.GastoDTO;
 import ttps.spring.dto.GrupoDTO;
+import ttps.spring.dto.PagoDTO;
 import ttps.spring.dto.UsuarioCredenciales;
 import ttps.spring.dto.UsuarioDTO;
 import ttps.spring.models.Grupo;
@@ -49,7 +50,6 @@ public class GrupoController {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	}
-
 	
     
 	@PostMapping
@@ -90,6 +90,7 @@ public class GrupoController {
 	  usuarios.add(user);
 	  grupo.setMiembros(usuarios);
 	  this.grupoService.guardarGrupo(grupo);
+	 
 	  return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
 	}
 	

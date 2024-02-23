@@ -11,12 +11,17 @@ public class Pago {
 	private double monto;
 	
 	@ManyToOne
-	@JoinColumn(name="idGasto")
-	private Gasto gasto;
+	@JoinColumn(name="idGrupo")
+	private Grupo grupo;
 	
 	@ManyToOne 
-	@JoinColumn(name = "idUsuario")
-	private Usuario usuario;
+	@JoinColumn(name = "idUsuarioDeudor")
+	private Usuario usuario_deudor;
+	
+	@ManyToOne 
+	@JoinColumn(name = "idUsuarioAcreedor")
+	private Usuario usuario_acreedor;
+	
 	
 	@Temporal(TemporalType.DATE)
 	private Date fechaCreacion;
@@ -24,11 +29,10 @@ public class Pago {
 	//CONSTRUCTOR
 	
 	
-	public Pago(double monto, Gasto gasto, Usuario usuario) {
+	public Pago(double monto, Grupo grupo) {
 		super();
 		this.monto = monto;
-		this.gasto = gasto;
-		this.usuario = usuario;
+		this.grupo = grupo;
 		this.fechaCreacion = new java.util.Date();;
 	}
 	public Pago() {}
@@ -42,20 +46,26 @@ public class Pago {
 	public void setMonto(double monto) {
 		this.monto = monto;
 	}
-	public Usuario getUsuario() {
-		return usuario;
+	
+	
+	public Usuario getUsuario_deudor() {
+		return usuario_deudor;
 	}
-	public void setUsuario(Usuario deudor) {
-		this.usuario = deudor;
+	public void setUsuario_deudor(Usuario usuario_deudor) {
+		this.usuario_deudor = usuario_deudor;
 	}
-
-	public Gasto getGasto() {
-		return gasto;
+	public Usuario getUsuario_acreedor() {
+		return usuario_acreedor;
 	}
-
-
-	public void setGasto(Gasto gasto) {
-		this.gasto = gasto;
+	public void setUsuario_acreedor(Usuario usuario_acreedor) {
+		this.usuario_acreedor = usuario_acreedor;
+	}
+	
+	public Grupo getGrupo() {
+		return grupo;
+	}
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
 	}
 	public Long getId() {
 		return id;

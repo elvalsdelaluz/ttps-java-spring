@@ -36,9 +36,6 @@ public class Gasto {
 	@OneToMany(mappedBy="gasto", fetch = FetchType.EAGER)
 	private List<Deuda> participantes;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy="gasto")
-	private List<Pago> pagos;
 	 
 	//CONSTRUCTOR
 	
@@ -59,9 +56,6 @@ public class Gasto {
 
 	//GETTER AND SETTER
 	
-	public List<Pago> getPagos() {
-		return pagos;
-	}
 
 	
 	public Grupo getGrupo() {
@@ -69,9 +63,6 @@ public class Gasto {
 	}
 	public void setGrupo(Grupo grupo) {
 		this.grupo = grupo;
-	}
-	public void setPagos(List<Pago> pagos) {
-		this.pagos = pagos;
 	}
 	
 	public double getMonto() {

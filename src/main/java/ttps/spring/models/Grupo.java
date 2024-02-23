@@ -26,6 +26,9 @@ public class Grupo {
     @JsonIgnore
 	private List<Gasto> gastos;
     
+    @JsonIgnore
+	@OneToMany(mappedBy="grupo", fetch = FetchType.EAGER)
+	private List<Pago> pagos;
     
 	@Temporal(TemporalType.DATE)
 	private Date fechaCreacion;
@@ -82,5 +85,14 @@ public class Grupo {
 		this.fechaCreacion = fechaCreacion;
 	}
 
+	public List<Pago> getPagos() {
+		return pagos;
+	}
+
+	public void setPagos(List<Pago> pagos) {
+		this.pagos = pagos;
+	}
+
+	
 	
 }

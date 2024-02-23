@@ -18,6 +18,7 @@ import ttps.spring.dto.GastoDTO;
 import ttps.spring.dto.GastoRequestDTO;
 import ttps.spring.dto.ResumenGastoRequestDTO;
 import ttps.spring.dto.ResumenRequestDTO;
+import ttps.spring.dto.SaldoDTO;
 import ttps.spring.dto.UsuarioDTO;
 import ttps.spring.models.Deuda;
 import ttps.spring.models.Gasto;
@@ -85,14 +86,44 @@ public class GastoController {
 	@GetMapping(path="/editar/{id_gasto}")
 	public Gasto obtenerGasto(@PathVariable("id_gasto") Long id_gasto){
 		//Este método retorna un gasto
-		return gastoService.obtenerPorId(id_gasto).get();
+		return gastoService.obtenerPorId(id_gasto);
 	}
 	
 	
+//	@PutMapping(path="/editar/{id_gasto}")
+//	public Gasto editarGasto2(@PathVariable("id_gasto") Long id_gasto, @RequestBody Gasto gasto){ //Este no anda borrar
+//		//Este metodo modifica un gasto
+//		return gastoService.guardarGasto(gasto);
+//	}
+
 	@PutMapping(path="/editar/{id_gasto}")
-	public Gasto editarGasto(@PathVariable("id_gasto") Long id_gasto, @RequestBody Gasto gasto){
+	public Gasto editarGasto(@PathVariable("id_gasto") Long id_gasto, @RequestBody ResumenGastoRequestDTO gasto_editado){
+		//Obtengo el gasto que hay que editar
+		Gasto gasto = this.gastoService.obtenerPorId(id_gasto);
+		if (gasto != null) {
+		  	if (gasto_editado.getMonto() != gasto.getMonto()) {
+		  		gasto.setMonto(gasto_editado.getMonto());
+		  		//Cambiar el monto de los deudores
+		  		this.gastoService.modificarDeudasDeUnGasto(gasto_editado.getInterests(), gasto.getId());
+		  	}
+		  	if (String.valueOf(gasto_editado.getFormapago()) != gasto.getFormaDivision()) {
+		        gasto.setFormaDivision(String.valueOf(gasto_editado.getFormapago()));
+		        //En este caso tambien tengo que cambiar los montos de los deudores por las dudas
+		        this.gastoService.modificarDeudasDeUnGasto(gasto_editado.getInterests(), gasto.getId());
+		  		
+		  	}
+		  	if (gasto_editado.getMiembro() != gasto.getUsuario().getId()) {
+		  		//Recupero al nuevo usuario
+		  		Usuario nuevo_usuario = this.gastoService.validarUsuario(gasto_editado.getMiembro());
+		  		if (nuevo_usuario != null) {
+		  			gasto.setUsuario(nuevo_usuario);
+		  		}	
+		  	}
+		    gastoService.guardarGasto(gasto);
+		}
+		
 		//Este metodo modifica un gasto
-		return gastoService.guardarGasto(gasto);
+		return null;
 	}
 	
 	@GetMapping(path="/{id_grupo}")
@@ -157,8 +188,8 @@ public class GastoController {
 	
 	
 	@GetMapping(path="/saldos/{id_grupo}")
-	public String saldosDeUnGrupo(@PathVariable("id_grupo") Long id_grupo) {
-		return this.gastoService.obtenerSaldosDeUnGrupo(id_grupo);
+	public ResponseEntity<List<SaldoDTO>>  saldosDeUnGrupo(@PathVariable("id_grupo") Long id_grupo) {
+		return new ResponseEntity<>(this.gastoService.obtenerSaldosDeUnGrupo(id_grupo), HttpStatus.OK);
 		
 	}
 

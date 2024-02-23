@@ -20,6 +20,10 @@ public class DeudaService {
 		return deudaRepository.save(deuda);
 	}
 	
+	public Deuda obtenerDeudaPorIdGastoYUsuario(Long idGasto, Long idUsuario) {
+	    return deudaRepository.findByGastoIdAndUsuarioId(idGasto, idUsuario).get();
+	}
+	
 	
 	
 
