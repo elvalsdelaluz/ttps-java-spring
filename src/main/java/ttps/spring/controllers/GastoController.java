@@ -104,12 +104,12 @@ public class GastoController {
 		  	if (gasto_editado.getMonto() != gasto.getMonto()) {
 		  		gasto.setMonto(gasto_editado.getMonto());
 		  		//Cambiar el monto de los deudores
-		  		this.gastoService.modificarDeudasDeUnGasto(gasto_editado.getInterests(), gasto.getId());
+		  		this.gastoService.modificarDeudasDeUnGasto(gasto_editado.getInterests(), gasto);
 		  	}
 		  	if (String.valueOf(gasto_editado.getFormapago()) != gasto.getFormaDivision()) {
 		        gasto.setFormaDivision(String.valueOf(gasto_editado.getFormapago()));
 		        //En este caso tambien tengo que cambiar los montos de los deudores por las dudas
-		        this.gastoService.modificarDeudasDeUnGasto(gasto_editado.getInterests(), gasto.getId());
+		        this.gastoService.modificarDeudasDeUnGasto(gasto_editado.getInterests(), gasto);
 		  		
 		  	}
 		  	if (gasto_editado.getMiembro() != gasto.getUsuario().getId()) {

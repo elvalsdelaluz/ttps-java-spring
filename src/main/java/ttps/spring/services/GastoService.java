@@ -85,7 +85,16 @@ public class GastoService {
 	
 	public Deuda guardarDeuda(ResumenRequestDTO resumen, Gasto gasto) {
 		Deuda deuda = new Deuda();
-		deuda.setMonto(resumen.getDeuda());
+		System.out.println(gasto.getFormaDivision());
+		if (gasto.getFormaDivision().equals("2")) {
+			double monto = (resumen.getDeuda()/100) * gasto.getMonto();
+			System.out.println("monto forma division por porcentaje" + resumen.getDeuda() +"fdkfj" +gasto.getMonto());			
+			deuda.setMonto(monto);
+		}
+		else {
+			deuda.setMonto(resumen.getDeuda());
+		}
+		
 		deuda.setUsuario(validarUsuario(resumen.getUser_id()));
 		deuda.setGasto(gasto);
 		return this.deudaService.guardarDeuda(deuda);
@@ -280,14 +289,21 @@ public class GastoService {
     }
     
     
-    public List<ResumenRequestDTO> modificarDeudasDeUnGasto(List<ResumenRequestDTO> deudas, Long id_gasto){
+    public List<ResumenRequestDTO> modificarDeudasDeUnGasto(List<ResumenRequestDTO> deudas, Gasto gasto){
     	for (ResumenRequestDTO resumen : deudas) {
     		//Recupero la deuda con el id_gasto y el email 
-        	Deuda deuda = this.deudaService.obtenerDeudaPorIdGastoYUsuario(id_gasto, resumen.getUser_id());
+        	Deuda deuda = this.deudaService.obtenerDeudaPorIdGastoYUsuario(gasto.getId(), resumen.getUser_id());
         
         	//Modifico el monto si la deuda existe
         	if (deuda != null) {
-        		deuda.setMonto(resumen.getDeuda());
+        		if (gasto.getFormaDivision().equals("2")) {
+        			double monto = (resumen.getDeuda()/100) * gasto.getMonto();
+        			System.out.println("monto forma division por porcentaje" + resumen.getDeuda() +"fdkfj" +gasto.getMonto());			
+        			deuda.setMonto(monto);
+        		}
+        		else {
+        			deuda.setMonto(resumen.getDeuda());
+        		}
         		this.deudaService.guardarDeuda(deuda);
         	}
 		}
